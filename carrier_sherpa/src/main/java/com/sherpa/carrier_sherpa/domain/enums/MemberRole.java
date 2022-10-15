@@ -1,4 +1,4 @@
-package com.sherpa.carrier_sherpa.domain.Enum;
+package com.sherpa.carrier_sherpa.domain.enums;
 
 public enum MemberRole {
     USER, ADMIN
