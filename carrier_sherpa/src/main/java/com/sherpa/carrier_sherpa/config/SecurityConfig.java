@@ -39,8 +39,10 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         HttpSecurity httpSecurity = http
-                .authorizeHttpRequests((authz) -> authz
-                        .anyRequest().authenticated()
+                .authorizeHttpRequests((auth) -> auth
+//                        .anyRequest().authenticated()
+// TODO: 페이지에 따른 권한 설정
+                                .anyRequest().permitAll()
                 )
                 .httpBasic(Customizer.withDefaults());
         return http.build();
