@@ -37,7 +37,6 @@ public class LuggageService {
             throw new IllegalStateException("존재하지 않는 회원입니다.");
         }
         Luggage luggage = new Luggage(
-                123L,
                 testMember,
                 "seoul",
                 "kangwon",
@@ -54,7 +53,6 @@ public class LuggageService {
 
         Member testMember = memberRepository.findByEmail("email");
         Luggage updateluggage = new Luggage(
-                100L,
                 testMember,
                 "busan",
                 "kangwon",

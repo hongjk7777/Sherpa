@@ -23,7 +23,6 @@ class LuggageTest {
         Member testMember = memberRepository.findByEmail("email");
         System.out.println(testMember.getRole());
         Luggage luggage = new Luggage(
-                123L,
                 testMember,
                 "seoul",
                 "incheon",
