@@ -32,12 +32,12 @@ public class LuggageService {
         // 일단 유저 빼고 Luggage 등록하는 법부터 익히자
         // Member 확인을 위해 MmeberREpository를 쓴다? 불필요한데... 일단 하자!
 
-        Member testMember = memberRepository.findByEmail(email);
+        Optional<Member> testMember = memberRepository.findByEmail(email);
         if (testMember==null) {
             throw new IllegalStateException("존재하지 않는 회원입니다.");
         }
         Luggage luggage = new Luggage(
-                testMember,
+                testMember.get(),
                 "seoul",
                 "kangwon",
                 "2022.11.01",
@@ -51,9 +51,9 @@ public class LuggageService {
 
     public Luggage update(Long luggageID, LuggageReqDto luggageReqDto){
 
-        Member testMember = memberRepository.findByEmail("email");
+        Optional<Member> testMember = memberRepository.findByEmail("email");
         Luggage updateluggage = new Luggage(
-                testMember,
+                testMember.get(),
                 "busan",
                 "kangwon",
                 "2022.11.01",
@@ -67,7 +67,7 @@ public class LuggageService {
             throw new IllegalStateException("존재하지 않는 캐리어입니다.");
         }
         luggage.get().update(
-                testMember,
+                testMember.get(),
                 "busan",
                 "kangwon",
                 "2022.11.01",
