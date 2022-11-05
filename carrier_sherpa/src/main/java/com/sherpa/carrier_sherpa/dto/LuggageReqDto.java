@@ -20,6 +20,4 @@ public class LuggageReqDto {
     private String luggage_image_url;
 
     private LuggageType luggageType;
-
-
 }

@@ -2,6 +2,7 @@ package com.sherpa.carrier_sherpa.domain.service;
 
 import com.sherpa.carrier_sherpa.domain.entity.Luggage;
 import com.sherpa.carrier_sherpa.domain.entity.Member;
+import com.sherpa.carrier_sherpa.domain.enums.LuggageStatus;
 import com.sherpa.carrier_sherpa.domain.enums.LuggageType;
 import com.sherpa.carrier_sherpa.domain.enums.MemberRole;
 import com.sherpa.carrier_sherpa.domain.repository.LuggageRepository;
@@ -50,7 +51,8 @@ public class LuggageService {
                 luggageReqDto.getStart_time(),
                 luggageReqDto.getEnd_time(),
                 luggageReqDto.getLuggage_image_url(),
-                luggageReqDto.getLuggageType()
+                luggageReqDto.getLuggageType(),
+                LuggageStatus.REGISTER
         );
         return this.luggageRepository.save(luggage);
     }
@@ -65,7 +67,8 @@ public class LuggageService {
                 "2022.11.01",
                 "2022.11.10",
                 null,
-                LuggageType.SMALL
+                LuggageType.SMALL,
+                LuggageStatus.REGISTER
         );
 
         Optional<Luggage> luggage = luggageRepository.findById(luggageID);
@@ -79,7 +82,9 @@ public class LuggageService {
                 "2022.11.01",
                 "2022.11.10",
                 null,
-                LuggageType.SMALL
+                LuggageType.SMALL,
+                LuggageStatus.REGISTER
+
         );
         luggageRepository.save(luggage.get());
         return null;

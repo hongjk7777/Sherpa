@@ -33,13 +33,12 @@ public class LuggageController {
     }
 
     @PostMapping("")
-    public String create(
+    public Luggage create(
             HttpServletRequest httpServletRequest,
             @RequestBody LuggageReqDto luggageReqDto){
         HttpSession httpSession = httpServletRequest.getSession();
         MemberResDto memberResDto = (MemberResDto) httpSession.getAttribute("loginMember");
-        luggageService.create(memberResDto.getId(),luggageReqDto);
-        return "OK";
+        return luggageService.create(memberResDto.getId(),luggageReqDto);
     }
 
     @PatchMapping("/{id}")

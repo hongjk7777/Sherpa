@@ -1,5 +1,6 @@
 package com.sherpa.carrier_sherpa.domain.entity;
 
+import com.sherpa.carrier_sherpa.domain.enums.LuggageStatus;
 import com.sherpa.carrier_sherpa.domain.enums.LuggageType;
 import com.sherpa.carrier_sherpa.domain.enums.MemberRole;
 import lombok.AccessLevel;
@@ -42,6 +43,9 @@ public class Luggage  extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private LuggageType size;
 
+    @Enumerated(EnumType.STRING)
+    private LuggageStatus status;
+
     // 왜 DB에는 luggageType이라 하며 오류나고 luggage_type이라 저장해야 되는건지...?
 
     public Luggage(
@@ -51,8 +55,10 @@ public class Luggage  extends BaseEntity{
             String start_time,
             String end_time,
             String luggage_image_url,
-            LuggageType size
-    ){
+            LuggageType size,
+            LuggageStatus status
+    ) {
+
         this.member = member;
         this.start = start;
         this.destination = destination;
@@ -60,6 +66,7 @@ public class Luggage  extends BaseEntity{
         this.end_time = end_time;
         this.luggage_image_url = luggage_image_url;
         this.size = size;
+        this.status = status;
     }
 
     public Luggage(
@@ -70,8 +77,9 @@ public class Luggage  extends BaseEntity{
             String start_time,
             String end_time,
             String luggage_image_url,
-            LuggageType size
-    ){
+            LuggageType size,
+            LuggageStatus status
+    ) {
         super(id);
         this.member = member;
         this.start = start;
@@ -80,6 +88,7 @@ public class Luggage  extends BaseEntity{
         this.end_time = end_time;
         this.luggage_image_url = luggage_image_url;
         this.size = size;
+        this.status = status;
     }
 
     public void update(
@@ -89,7 +98,8 @@ public class Luggage  extends BaseEntity{
             String start_time,
             String end_time,
             String luggage_image_url,
-            LuggageType size
+            LuggageType size,
+            LuggageStatus status
     ){
         this.member = member;
         this.start = start;
@@ -98,6 +108,7 @@ public class Luggage  extends BaseEntity{
         this.end_time = end_time;
         this.luggage_image_url = luggage_image_url;
         this.size = size;
+        this.status = status;
     }
 
 }
