@@ -7,9 +7,12 @@ import com.sherpa.carrier_sherpa.domain.enums.MemberRole;
 import com.sherpa.carrier_sherpa.domain.repository.LuggageRepository;
 import com.sherpa.carrier_sherpa.domain.repository.MemberRepository;
 import com.sherpa.carrier_sherpa.dto.LuggageReqDto;
+import com.sherpa.carrier_sherpa.dto.LuggageResDto;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LuggageService {
@@ -23,9 +26,15 @@ public class LuggageService {
         this.memberRepository = memberRepository;
     }
 
-    public Luggage findByMemberId(Long memberId){
-        Luggage luggage = new Luggage();
-        return luggageRepository.findByMember_Id(memberId).get();
+    public List<LuggageResDto> findByMemberId(String id){
+        System.out.println("id = " + id);
+        List<Luggage> luggages =luggageRepository.findByMember_Id(id);
+        // NPE 발생 가능 , 오류 처리 필요할지도?
+        // NPE 발생 X -> 아무것도 없는 애들도 그냥 빈 리스트로 출력
+
+        return luggages.stream()
+                .map(luggage -> new LuggageResDto(luggage.getId(),luggage.getMember().getId()))
+                .collect(Collectors.toList());
     }
 
     public Luggage create(String email,LuggageReqDto luggageReqDto) {
@@ -49,7 +58,7 @@ public class LuggageService {
         return this.luggageRepository.save(luggage);
     }
 
-    public Luggage update(Long luggageID, LuggageReqDto luggageReqDto){
+    public Luggage update(String luggageID, LuggageReqDto luggageReqDto){
 
         Optional<Member> testMember = memberRepository.findByEmail("email");
         Luggage updateluggage = new Luggage(
@@ -79,7 +88,7 @@ public class LuggageService {
         return null;
     }
 
-    public Luggage delete(Long luggageId){
+    public Luggage delete(String luggageId){
         luggageRepository.deleteById(luggageId);
         return null;
     }

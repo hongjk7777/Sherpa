@@ -1,14 +1,18 @@
 package com.sherpa.carrier_sherpa.Controller;
 
 import com.sherpa.carrier_sherpa.domain.entity.Luggage;
+import com.sherpa.carrier_sherpa.domain.entity.Member;
 import com.sherpa.carrier_sherpa.domain.service.LuggageService;
 import com.sherpa.carrier_sherpa.dto.LuggageReqDto;
 import com.sherpa.carrier_sherpa.dto.LuggageResDto;
+import com.sherpa.carrier_sherpa.dto.MemberFormDto;
+import com.sherpa.carrier_sherpa.dto.MemberResDto;
 import org.hibernate.validator.constraints.pl.REGON;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 @RequestMapping("/luggage")
@@ -21,8 +25,11 @@ public class LuggageController {
     }
 
     @GetMapping("")
-    public Luggage findByMemberId(@PathVariable Long memberId){
-        return luggageService.findByMemberId(memberId);
+    public List<LuggageResDto> findMyluggage(
+            HttpServletRequest httpServletRequest){
+        HttpSession httpSession = httpServletRequest.getSession();
+        MemberResDto memberResDto = (MemberResDto) httpSession.getAttribute("loginMember");
+        return luggageService.findByMemberId(memberResDto.getId());
     }
 
     @PostMapping("")
@@ -38,7 +45,7 @@ public class LuggageController {
 
     @PatchMapping("/{id}")
     public String update(
-            @PathVariable("id") Long luggageId,
+            @PathVariable("id") String luggageId,
             @RequestBody LuggageReqDto luggageReqDto){
         luggageService.update(luggageId,luggageReqDto);
         return null;
@@ -49,7 +56,7 @@ public class LuggageController {
 
     @DeleteMapping("/{id}")
     public String delete(
-            @PathVariable("id") Long luggageId,
+            @PathVariable("id") String luggageId,
             @RequestBody LuggageReqDto luggageReqDto){
         luggageService.delete(luggageId);
         return null;

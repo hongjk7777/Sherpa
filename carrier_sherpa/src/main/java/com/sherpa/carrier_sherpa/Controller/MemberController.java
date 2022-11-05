@@ -35,14 +35,14 @@ public class MemberController {
 
     @ResponseBody
     @PostMapping("/signin")
-    public MemberFormDto signIn(
+    public MemberResDto signIn(
             HttpServletRequest httpServletRequest,
             @RequestBody MemberFormDto memberFormDto
     ){
         HttpSession session = httpServletRequest.getSession();
-        //        session.setAttribute("loginMember",memberService.signIn(memberFormDto));
-        session.setAttribute("loginMember",memberFormDto);
-        return memberFormDto;
+        MemberResDto loginMember = memberService.signIn(memberFormDto);
+        session.setAttribute("loginMember",memberService.signIn(memberFormDto));
+        return loginMember;
     }
 
     @ResponseBody

@@ -30,7 +30,9 @@ public class MemberService {
         if (findMember == null) {
             throw new IllegalStateException("존재하지 않는 회원입니다.");
         }
-        return new MemberResDto(findMember.get().getId(), findMember.get().getEmail());
+        return new MemberResDto(
+                findMember.get().getId(),
+                findMember.get().getEmail());
     }
 
     public MemberResDto signUp(MemberCreateReqDto memberCreateReqDto) {
@@ -48,7 +50,9 @@ public class MemberService {
 
         memberRepository.save(createMember);
 
-        return new MemberResDto(createMember);
+        return new MemberResDto(
+                findMember.get().getId(),
+                findMember.get().getEmail());
     }
 
     public MemberResDto signIn(MemberFormDto memberformDto) {
@@ -56,14 +60,14 @@ public class MemberService {
         if (loginMember == null) {
             throw new IllegalStateException("존재하지 않는 회원입니다.");
         }
-        System.out.println("findMember.get().getPassword() = " + loginMember.get().getPassword());
-        System.out.println("memberformDto input : "+bCryptPasswordEncoder.encode(memberformDto.getPassword()));
-        System.out.println("memberformDto input : "+bCryptPasswordEncoder.encode(memberformDto.getPassword()));
-        if (loginMember.get().getPassword() != bCryptPasswordEncoder.encode(memberformDto.getPassword())) {
+        System.out.println("memberformDto.getPassword() = " + bCryptPasswordEncoder.encode(memberformDto.getPassword()));
+        System.out.println("loginMember.getPassword = " + loginMember.get().getPassword());
+        if (!bCryptPasswordEncoder.matches(memberformDto.getPassword(),loginMember.get().getPassword())) {
             throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
         }
-
-        return new MemberResDto(loginMember.get());
+        return new MemberResDto(
+                loginMember.get().getId(),
+                loginMember.get().getEmail());
     }
 
     public Member saveMember(Member member) {
