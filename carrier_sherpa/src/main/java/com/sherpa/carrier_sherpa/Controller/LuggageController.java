@@ -24,6 +24,7 @@ public class LuggageController {
         this.luggageService = luggageService;
     }
 
+    // 추가 구현할 API : findInBlock,
     @GetMapping("")
     public List<LuggageResDto> findMyluggage(
             HttpServletRequest httpServletRequest){
@@ -43,20 +44,22 @@ public class LuggageController {
 
     @PatchMapping("/{id}")
     public String update(
+            HttpServletRequest httpServletRequest,
             @PathVariable("id") String luggageId,
             @RequestBody LuggageReqDto luggageReqDto){
-        luggageService.update(luggageId,luggageReqDto);
+        HttpSession httpSession = httpServletRequest.getSession();
+        MemberResDto memberResDto = (MemberResDto) httpSession.getAttribute("loginMember");
+        luggageService.update(luggageId,memberResDto.getId(),luggageReqDto);
         return null;
     }
-    // User -> LuggaeController 로 접근
-    // User 정보와 Luggage 정보로 Luggage 생성
-    // Luggage 생성하려면 Member가 필요
 
     @DeleteMapping("/{id}")
     public String delete(
-            @PathVariable("id") String luggageId,
-            @RequestBody LuggageReqDto luggageReqDto){
-        luggageService.delete(luggageId);
+            HttpServletRequest httpServletRequest,
+            @PathVariable("id") String luggageId){
+        HttpSession httpSession = httpServletRequest.getSession();
+        MemberResDto memberResDto = (MemberResDto) httpSession.getAttribute("loginMember");
+        luggageService.delete(luggageId,memberResDto.getId());
         return null;
     }
 }

@@ -6,12 +6,14 @@ import com.sherpa.carrier_sherpa.domain.enums.MemberRole;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
+@Setter
 @Table(name = "luggage")
 @Entity
 public class Luggage  extends BaseEntity{

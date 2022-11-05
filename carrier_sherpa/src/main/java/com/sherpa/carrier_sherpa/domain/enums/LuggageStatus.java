@@ -5,5 +5,6 @@ public enum LuggageStatus {
     ACCEPT,
     DELIVER,
     ARRIVE,
+    CANCEL,
     INACTIVE
 }
