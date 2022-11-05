@@ -34,12 +34,11 @@ public class LuggageController {
 
     @PostMapping("")
     public String create(
-//            HttpServletRequest request,
-            @RequestParam("email") String testemail,
+            HttpServletRequest httpServletRequest,
             @RequestBody LuggageReqDto luggageReqDto){
-//        HttpSession session = request.getSession();
-//        String email = (String) session.getAttribute("email");
-        luggageService.create(testemail,luggageReqDto);
+        HttpSession httpSession = httpServletRequest.getSession();
+        MemberResDto memberResDto = (MemberResDto) httpSession.getAttribute("loginMember");
+        luggageService.create(memberResDto.getId(),luggageReqDto);
         return "OK";
     }
 

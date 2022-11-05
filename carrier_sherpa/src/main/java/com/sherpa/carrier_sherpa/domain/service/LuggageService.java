@@ -37,23 +37,20 @@ public class LuggageService {
                 .collect(Collectors.toList());
     }
 
-    public Luggage create(String email,LuggageReqDto luggageReqDto) {
-        // 일단 유저 빼고 Luggage 등록하는 법부터 익히자
-        // Member 확인을 위해 MmeberREpository를 쓴다? 불필요한데... 일단 하자!
-
-        Optional<Member> testMember = memberRepository.findByEmail(email);
-        if (testMember==null) {
+    public Luggage create(String id,LuggageReqDto luggageReqDto) {
+        // Member 확인을 위해 MmeberREpository를 쓴다? 불필요해보이지만...
+        Optional<Member> loginMember = memberRepository.findById(id);
+        if (loginMember==null) {
             throw new IllegalStateException("존재하지 않는 회원입니다.");
         }
         Luggage luggage = new Luggage(
-                testMember.get(),
-                "seoul",
-                "kangwon",
-                "2022.11.01",
-                "2022.11.10",
-                null,
-                LuggageType.MEDIUM
-
+                loginMember.get(),
+                luggageReqDto.getStart(),
+                luggageReqDto.getDestination(),
+                luggageReqDto.getStart_time(),
+                luggageReqDto.getEnd_time(),
+                luggageReqDto.getLuggage_image_url(),
+                luggageReqDto.getLuggageType()
         );
         return this.luggageRepository.save(luggage);
     }
