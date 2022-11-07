@@ -4,14 +4,17 @@ import com.sherpa.carrier_sherpa.config.PrincipalDetails;
 import com.sherpa.carrier_sherpa.domain.entity.Member;
 import com.sherpa.carrier_sherpa.domain.enums.MemberRole;
 import com.sherpa.carrier_sherpa.domain.repository.MemberRepository;
+import com.sherpa.carrier_sherpa.dto.MemberCreateReqDto;
 import com.sherpa.carrier_sherpa.dto.MemberFormDto;
+import com.sherpa.carrier_sherpa.dto.MemberResDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.swing.text.html.Option;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -19,6 +22,53 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public MemberResDto findByEmail(String email){
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+        if (findMember == null) {
+            throw new IllegalStateException("존재하지 않는 회원입니다.");
+        }
+        return new MemberResDto(
+                findMember.get().getId(),
+                findMember.get().getEmail());
+    }
+
+    public MemberResDto signUp(MemberCreateReqDto memberCreateReqDto) {
+        System.out.println("memberCreateReqDto = " + memberCreateReqDto.getEmail());
+        Optional<Member> findMember = memberRepository.findByEmail(memberCreateReqDto.getEmail());
+        if (findMember.isPresent()) {
+            throw new IllegalStateException("존재하는 회원입니다.");
+        }
+
+        Member createMember = Member.builder()
+                .email(memberCreateReqDto.getEmail())
+                .password(bCryptPasswordEncoder.encode(memberCreateReqDto.getPassword()))
+                .role(MemberRole.USER)
+                .build();
+
+        memberRepository.save(createMember);
+
+        return new MemberResDto(
+                findMember.get().getId(),
+                findMember.get().getEmail());
+    }
+
+    public MemberResDto signIn(MemberFormDto memberformDto) {
+        Optional<Member> loginMember = memberRepository.findByEmail(memberformDto.getEmail());
+        if (loginMember == null) {
+            throw new IllegalStateException("존재하지 않는 회원입니다.");
+        }
+        System.out.println("memberformDto.getPassword() = " + bCryptPasswordEncoder.encode(memberformDto.getPassword()));
+        System.out.println("loginMember.getPassword = " + loginMember.get().getPassword());
+        if (!bCryptPasswordEncoder.matches(memberformDto.getPassword(),loginMember.get().getPassword())) {
+            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+        }
+        return new MemberResDto(
+                loginMember.get().getId(),
+                loginMember.get().getEmail());
+    }
 
     public Member saveMember(Member member) {
         validateDuplicateMember(member);
@@ -26,8 +76,8 @@ public class MemberService {
     }
 
     private void validateDuplicateMember(Member member) {
-        Member findMember = memberRepository.findByEmail(member.getEmail());
-        if (findMember != null) {
+        Optional<Member> findMember = memberRepository.findByEmail(member.getEmail());
+        if (findMember.get() != null) {
             throw new IllegalStateException("이미 가입된 회원입니다.");
         }
     }
@@ -47,8 +97,8 @@ public class MemberService {
     }
 
     public MemberFormDto findMember(MemberFormDto memberFormDto) {
-        Member findMember = memberRepository.findByEmail(memberFormDto.getEmail());
-        return createMemberFormDto(findMember);
+        Optional<Member> findMember = memberRepository.findByEmail(memberFormDto.getEmail());
+        return createMemberFormDto(findMember.get());
     }
 
 }

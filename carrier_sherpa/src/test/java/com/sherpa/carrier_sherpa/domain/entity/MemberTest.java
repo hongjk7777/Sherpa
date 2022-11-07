@@ -17,9 +17,9 @@ class MemberTest {
 
     @Test
     void test(){
-        Member member = new Member(123L, "test", "test", MemberRole.USER);
+        Member member = new Member( "test", "test", MemberRole.USER);
         memberRepository.save(member);
-        System.out.println(memberRepository.findByEmail("email").getPassword());
+        System.out.println(memberRepository.findByEmail("email").get().getPassword());
     }
 
 }

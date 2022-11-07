@@ -9,11 +9,12 @@ import javax.validation.constraints.NotBlank;
 @Getter
 public class LuggageResDto {
 
-    private Long luggageId;
+    private String luggageId;
 
     private String memberId;
 
-//    public static LuggageResDto of(Long luggageId,String memberId){
-//        return new LuggageResDto()
-//    }
+    public LuggageResDto(String luggageId,String memberId){
+        this.luggageId = luggageId;
+        this.memberId = memberId;
+    }
 }

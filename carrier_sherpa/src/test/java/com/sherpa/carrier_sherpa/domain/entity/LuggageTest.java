@@ -1,5 +1,6 @@
 package com.sherpa.carrier_sherpa.domain.entity;
 
+import com.sherpa.carrier_sherpa.domain.enums.LuggageStatus;
 import com.sherpa.carrier_sherpa.domain.enums.LuggageType;
 import com.sherpa.carrier_sherpa.domain.enums.MemberRole;
 import com.sherpa.carrier_sherpa.domain.repository.LuggageRepository;
@@ -23,7 +24,6 @@ class LuggageTest {
         Member testMember = memberRepository.findByEmail("email");
         System.out.println(testMember.getRole());
         Luggage luggage = new Luggage(
-                123L,
                 testMember,
                 "seoul",
                 "incheon",
@@ -33,6 +33,7 @@ class LuggageTest {
                 LuggageType.MEDIUM,
                 1.2345,
                 3.1234
+                LuggageStatus.REGISTER
         );
 
         luggageRepository.save(luggage);

@@ -27,10 +27,10 @@ public class ReportService {
     }
 
     private void validateDuplicateReport(Report report, Order order) {
-        Report findOrder = reportRepository.findByOrderId(order.getId());
+/*        Report findOrder = reportRepository.findByOrderId(order.getId());
         if (findOrder != null) {
             throw new IllegalStateException("이미 신고가 들어갔습니다.");
-        }
+        }*/
     }
 
     public Report createReport(ReportFormDto reportFormDto, OrderFormDto orderFormDto) {

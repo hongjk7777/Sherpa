@@ -4,7 +4,9 @@ import com.sherpa.carrier_sherpa.domain.entity.Luggage;
 import com.sherpa.carrier_sherpa.domain.entity.Member;
 import com.sherpa.carrier_sherpa.domain.service.LuggageService;
 import com.sherpa.carrier_sherpa.domain.service.MemberService;
+import com.sherpa.carrier_sherpa.dto.MemberCreateReqDto;
 import com.sherpa.carrier_sherpa.dto.MemberFormDto;
+import com.sherpa.carrier_sherpa.dto.MemberResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -27,37 +30,34 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
     private final LuggageService luggageService;
 
-    @GetMapping(value = "/new")
-    public String memberForm(Model model) {
-        model.addAttribute("memberFormDto", new MemberFormDto());
-        return "member/memberForm";
+    @ResponseBody
+    @PostMapping("/signup")
+    public MemberResDto signUp(
+            HttpServletRequest httpServletRequest,
+            @RequestBody MemberCreateReqDto memberCreateReqDto
+    ){
+        return memberService.signUp(memberCreateReqDto);
     }
 
-    @GetMapping(value = "/store")
-    public String store() {
-        memberService.saveMember(
-                Member.builder()
-                        .email("test@naver.com")
-                        .password("1111")
-                        .build());
-        return "";
+    @ResponseBody
+    @PostMapping("/signin")
+    public MemberResDto signIn(
+            HttpServletRequest httpServletRequest,
+            @RequestBody MemberFormDto memberFormDto
+    ){
+        HttpSession session = httpServletRequest.getSession();
+        MemberResDto loginMember = memberService.signIn(memberFormDto);
+        session.setAttribute("loginMember",memberService.signIn(memberFormDto));
+        return loginMember;
     }
 
-    @PostMapping(value = "/new")
-    public String memberForm(@Valid MemberFormDto memberFormDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "member/memberForm";
-        }
-
-        try {
-            Member member = memberService.createMember(memberFormDto, passwordEncoder);
-            memberService.saveMember(member);
-        } catch (IllegalStateException e) {
-            //TODO: 여기에 에러 났다는 걸 알려주는 구문
-            return "member/memberForm";
-        }
-
-        return "redirect:/";
+    @ResponseBody
+    @GetMapping("/test")
+    public MemberResDto test(
+            HttpServletRequest httpServletRequest) {
+        HttpSession session = httpServletRequest.getSession();
+        MemberFormDto memberFormDto = (MemberFormDto) session.getAttribute("loginMember");
+        return memberService.findByEmail(memberFormDto.getEmail());
     }
 
     @GetMapping(value = "/near-luggage")
@@ -67,6 +67,5 @@ public class MemberController {
 
         return luggageListInMaxDistance.toString();
     }
-
 }
 

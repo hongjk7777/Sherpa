@@ -11,19 +11,19 @@ import javax.persistence.*;
 @Getter
 @Table(name = "orders")
 @Entity
-public class Order {
+public class Order  extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "order_id")
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Column(name = "order_id")
+//    private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "member_id", name = "sender_id")
+    @JoinColumn(referencedColumnName = "id", name = "sender_id")
     private Member sender;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "member_id", name = "courier_id")
+    @JoinColumn(referencedColumnName = "id", name = "courier_id")
     private Member courier;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -35,8 +35,16 @@ public class Order {
     private String goal;
 
     @Builder
-    public Order(Long id, Member sender, Member courier, Luggage luggage, String start, String goal) {
-        this.id = id;
+    public Order(Member sender, Member courier, Luggage luggage, String start, String goal) {
+        this.sender = sender;
+        this.courier = courier;
+        this.luggage = luggage;
+        this.start = start;
+        this.goal = goal;
+    }
+
+    public Order(String id, Member sender, Member courier, Luggage luggage, String start, String goal) {
+        super(id);
         this.sender = sender;
         this.courier = courier;
         this.luggage = luggage;
