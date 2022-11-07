@@ -2,13 +2,13 @@ package com.sherpa.carrier_sherpa.domain.service;
 
 import com.sherpa.carrier_sherpa.domain.entity.Luggage;
 import com.sherpa.carrier_sherpa.domain.entity.Member;
+import com.sherpa.carrier_sherpa.domain.entity.Order;
 import com.sherpa.carrier_sherpa.domain.enums.LuggageStatus;
-import com.sherpa.carrier_sherpa.domain.enums.LuggageType;
-import com.sherpa.carrier_sherpa.domain.enums.MemberRole;
 import com.sherpa.carrier_sherpa.domain.exception.BaseException;
 import com.sherpa.carrier_sherpa.domain.exception.ErrorCode;
 import com.sherpa.carrier_sherpa.domain.repository.LuggageRepository;
 import com.sherpa.carrier_sherpa.domain.repository.MemberRepository;
+import com.sherpa.carrier_sherpa.domain.repository.OrderRepository;
 import com.sherpa.carrier_sherpa.dto.LuggageReqDto;
 import com.sherpa.carrier_sherpa.dto.LuggageResDto;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,14 +23,16 @@ public class LuggageService {
 
     private final LuggageRepository luggageRepository;
     private final MemberRepository memberRepository;
+    private final OrderRepository orderRepository;
 
     // 운송자의 화면에 나올 짐들의 최대 거리
     public static final int MAX_DISTANT = 1000;
 
 
-    public LuggageService(LuggageRepository luggageRepository, MemberRepository memberRepository) {
+    public LuggageService(LuggageRepository luggageRepository, MemberRepository memberRepository, OrderRepository orderRepository) {
         this.luggageRepository = luggageRepository;
         this.memberRepository = memberRepository;
+        this.orderRepository = orderRepository;
     }
 
     public List<LuggageResDto> findByMemberId(String id){
@@ -138,19 +139,19 @@ public class LuggageService {
         return luggageRepository.save(luggage);
     }
 
-    public List<Luggage> getLuggageListInMaxDistance(double userLat, double userLon) {
-        List<Luggage> allLuggage = luggageRepository.findAll();
-        List<Luggage> nearLuggageList = new ArrayList<>();
+    public List<Order> getLuggageListInMaxDistance(double userLat, double userLon) {
+        List<Order> allOrders = orderRepository.findAll();
+        List<Order> nearOrderList = new ArrayList<>();
 
-        for (Luggage luggage : allLuggage) {
-            double distance = getDistance(userLat, luggage.getLat(), userLon, luggage.getLon());
+        for (Order order : allOrders) {
+            double distance = getDistance(userLat, order.getLat(), userLon, order.getLon());
 
             if (distance < MAX_DISTANT) {
-                nearLuggageList.add(luggage);
+                nearOrderList.add(order);
             }
         }
 
-        return nearLuggageList;
+        return nearOrderList;
     }
 
 

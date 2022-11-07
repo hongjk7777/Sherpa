@@ -34,6 +34,12 @@ public class Order  extends BaseEntity{
 
     private String goal;
 
+
+
+    private double lat;
+
+    private double lon;
+
     @Builder
     public Order(Member sender, Member courier, Luggage luggage, String start, String goal) {
         this.sender = sender;

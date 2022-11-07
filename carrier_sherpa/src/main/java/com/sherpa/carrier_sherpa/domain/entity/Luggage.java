@@ -46,10 +46,6 @@ public class Luggage  extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private LuggageType size;
 
-    private double lat;
-
-    private double lon;
-
     @Enumerated(EnumType.STRING)
     private LuggageStatus status;
 
@@ -64,8 +60,6 @@ public class Luggage  extends BaseEntity{
             String end_time,
             String luggage_image_url,
             LuggageType size,
-            double lat,
-            double lon
             LuggageStatus status
     ){
         this.member = member;
@@ -75,8 +69,6 @@ public class Luggage  extends BaseEntity{
         this.end_time = end_time;
         this.luggage_image_url = luggage_image_url;
         this.size = size;
-        this.lat = lat;
-        this.lon = lon;
         this.status = status;
     }
 

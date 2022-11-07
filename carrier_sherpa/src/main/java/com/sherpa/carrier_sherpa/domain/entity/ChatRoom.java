@@ -33,11 +33,11 @@ public class ChatRoom {
     private String roomName;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "member_id", name = "sender_id")
+    @JoinColumn(referencedColumnName = "id", name = "sender_id")
     private Member sender;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "member_id", name = "courier_id")
+    @JoinColumn(referencedColumnName = "id", name = "courier_id")
     private Member courier;
 
     public static ChatRoom create(String name) {
