@@ -12,12 +12,12 @@ import javax.persistence.*;
 @Getter
 @Table(name = "report")
 @Entity
-public class Report {
+public class Report  extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "report_id")
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Column(name = "report_id")
+//    private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
@@ -28,9 +28,14 @@ public class Report {
     private String details;
 
     @Builder
-    public Report(Long id, Order order, Member sender, Member courier, ReportType reportType, String details) {
-        this.id = id;
+    public Report( Order order, Member sender, Member courier, ReportType reportType, String details) {
         this.order = order;
+        this.reportType = reportType;
+        this.details = details;
+    }
+
+    public Report( String id,Order order, Member sender, Member courier, ReportType reportType, String details) {
+        super(id);
         this.reportType = reportType;
         this.details = details;
     }

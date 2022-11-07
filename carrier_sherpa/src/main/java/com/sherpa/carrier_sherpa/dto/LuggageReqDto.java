@@ -1,5 +1,6 @@
 package com.sherpa.carrier_sherpa.dto;
 
+import com.sherpa.carrier_sherpa.domain.enums.LuggageType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
@@ -8,10 +9,15 @@ import javax.validation.constraints.NotBlank;
 @Getter
 public class LuggageReqDto {
 
-    @NotBlank(message = "Luggage ID는 필수 입력 값입니다")
-    private Long luggageId;
+    private String start;
 
-    @NotBlank(message = "member ID는 필수 입력 값입니다")
-    private String memberId;
+    private String destination;
 
+    private String start_time;
+
+    private String end_time;
+
+    private String luggage_image_url;
+
+    private LuggageType luggageType;
 }
