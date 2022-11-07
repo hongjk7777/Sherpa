@@ -4,6 +4,7 @@ import com.sherpa.carrier_sherpa.domain.enums.LuggageStatus;
 import com.sherpa.carrier_sherpa.domain.enums.LuggageType;
 import com.sherpa.carrier_sherpa.domain.enums.MemberRole;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -50,6 +51,7 @@ public class Luggage  extends BaseEntity{
 
     // 왜 DB에는 luggageType이라 하며 오류나고 luggage_type이라 저장해야 되는건지...?
 
+    @Builder
     public Luggage(
             Member member,
             String start,
@@ -59,8 +61,7 @@ public class Luggage  extends BaseEntity{
             String luggage_image_url,
             LuggageType size,
             LuggageStatus status
-    ) {
-
+    ){
         this.member = member;
         this.start = start;
         this.destination = destination;

@@ -21,7 +21,7 @@ class LuggageTest {
 
     @Test
     void test(){
-        Member testMember = memberRepository.findByEmail("email");
+        Member testMember = memberRepository.findByEmail("email").orElse(null);
         System.out.println(testMember.getRole());
         Luggage luggage = new Luggage(
                 testMember,
