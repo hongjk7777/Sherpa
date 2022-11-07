@@ -3,6 +3,7 @@ package com.sherpa.carrier_sherpa.domain.entity;
 import com.sherpa.carrier_sherpa.domain.enums.LuggageType;
 import com.sherpa.carrier_sherpa.domain.enums.MemberRole;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
@@ -42,8 +43,13 @@ public class Luggage {
     @Enumerated(EnumType.STRING)
     private LuggageType size;
 
+    private double lat;
+
+    private double lon;
+
     // 왜 DB에는 luggageType이라 하며 오류나고 luggage_type이라 저장해야 되는건지...?
 
+    @Builder
     public Luggage(
             Long id,
             Member member,
@@ -52,7 +58,9 @@ public class Luggage {
             String start_time,
             String end_time,
             String luggage_image_url,
-            LuggageType size
+            LuggageType size,
+            double lat,
+            double lon
     ){
         this.id = id;
         this.member = member;
@@ -62,6 +70,8 @@ public class Luggage {
         this.end_time = end_time;
         this.luggage_image_url = luggage_image_url;
         this.size = size;
+        this.lat = lat;
+        this.lon = lon;
     }
     public void update(
             Member member,

@@ -30,8 +30,9 @@ class LuggageTest {
                 "2022.11.01",
                 "2022.11.10",
                 null,
-                LuggageType.MEDIUM
-
+                LuggageType.MEDIUM,
+                1.2345,
+                3.1234
         );
 
         luggageRepository.save(luggage);

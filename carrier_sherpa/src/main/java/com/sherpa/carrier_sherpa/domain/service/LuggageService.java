@@ -3,12 +3,13 @@ package com.sherpa.carrier_sherpa.domain.service;
 import com.sherpa.carrier_sherpa.domain.entity.Luggage;
 import com.sherpa.carrier_sherpa.domain.entity.Member;
 import com.sherpa.carrier_sherpa.domain.enums.LuggageType;
-import com.sherpa.carrier_sherpa.domain.enums.MemberRole;
 import com.sherpa.carrier_sherpa.domain.repository.LuggageRepository;
 import com.sherpa.carrier_sherpa.domain.repository.MemberRepository;
 import com.sherpa.carrier_sherpa.dto.LuggageReqDto;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,6 +17,9 @@ public class LuggageService {
 
     private final LuggageRepository luggageRepository;
     private final MemberRepository memberRepository;
+
+    // 운송자의 화면에 나올 짐들의 최대 거리
+    public static final int MAX_DISTANT = 1000;
 
 
     public LuggageService(LuggageRepository luggageRepository, MemberRepository memberRepository) {
@@ -44,8 +48,9 @@ public class LuggageService {
                 "2022.11.01",
                 "2022.11.10",
                 null,
-                LuggageType.MEDIUM
-
+                LuggageType.MEDIUM,
+                3.1234,
+                2.1234
         );
         return this.luggageRepository.save(luggage);
     }
@@ -61,7 +66,9 @@ public class LuggageService {
                 "2022.11.01",
                 "2022.11.10",
                 null,
-                LuggageType.SMALL
+                LuggageType.SMALL,
+                2.1234,
+                3.1234
         );
 
         Optional<Luggage> luggage = luggageRepository.findById(luggageID);
@@ -85,5 +92,39 @@ public class LuggageService {
         luggageRepository.deleteById(luggageId);
         return null;
     }
+
+    public List<Luggage> getLuggageListInMaxDistance(double userLat, double userLon) {
+        List<Luggage> allLuggage = luggageRepository.findAll();
+        List<Luggage> nearLuggageList = new ArrayList<>();
+
+        for (Luggage luggage : allLuggage) {
+            double distance = getDistance(userLat, luggage.getLat(), userLon, luggage.getLon());
+
+            if (distance < MAX_DISTANT) {
+                nearLuggageList.add(luggage);
+            }
+        }
+
+        return nearLuggageList;
+    }
+
+
+public double getDistance(double lat1, double lat2, double lon1,
+                                 double lon2) {
+
+    final int R = 6371; // Radius of the earth
+
+    double latDistance = Math.toRadians(lat2 - lat1);
+    double lonDistance = Math.toRadians(lon2 - lon1);
+    double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+            + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+            * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    double distance = R * c * 1000; // convert to meters
+
+    distance = Math.pow(distance, 2);
+
+    return Math.sqrt(distance);
+}
 
 }
