@@ -18,9 +18,11 @@ public class MessageController {
     @MessageMapping("/chat/message")
     public void enter(ChatMessage message) {
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
+//            ChatMessage.builder()
+//                            .m
             message.setMessage(message.getSender()+"님이 입장하였습니다.");
         }
         chatMessageService.saveChatMsg(message);
-        sendingOperations.convertAndSend("/topic/chat/room/"+message.getChatRoom().getRoomId(),message);
+        sendingOperations.convertAndSend("/topic/chat/room/"+message.getRoomId(),message);
     }
 }

@@ -18,7 +18,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ChatService {
 
-    private Map<String, ChatRoom> chatRooms;
+    private Map<Long, ChatRoom> chatRooms;
 
     private final ChatRoomRepository chatRoomRepository;
 
@@ -45,9 +45,11 @@ public class ChatService {
 
     //채팅방 생성
     public ChatRoom createRoom(String name) {
-        ChatRoom chatRoom = ChatRoom.create(name);
-        chatRooms.put(chatRoom.getRoomId(), chatRoom);
+        ChatRoom chatRoom = ChatRoom.builder()
+                                    .roomName(name)
+                                    .build();
         chatRoomRepository.save(chatRoom);
+        chatRooms.put(chatRoom.getRoomId(), chatRoom);
         return chatRoom;
     }
 }
